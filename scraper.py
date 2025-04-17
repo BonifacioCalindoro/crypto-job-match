@@ -13,9 +13,7 @@ class Job(BaseModel):
     tags: List[str] = []
     posted: str = ""
     description: str = ""
-
-def click_job_xpath(index: int) -> str:
-    return f'xpath=/html/body/div/main/section[1]/section/table/tbody/tr[{index}]'
+    link: str = ""
 
 def split_camel_case(text: str) -> List[str]:
     "This function splits a string into a list of words based on camel case"
@@ -31,16 +29,14 @@ async def run_scraper(playwright: Playwright) -> None:
     rows = await (table.locator("xpath=//tr")).all()
     
     jobs = []
-    j = 1
     for row in rows[2:]:
         lines = (await row.inner_text()).split('\n')
-        button = page.locator(click_job_xpath(j))
-        await button.hover()
-        await asyncio.sleep(0.2)
-        await button.click()
-        await asyncio.sleep(0.2)
-        j += 1
         location_field = lines[3]
+        link = 'https://cryptojobslist.com' + (await (await (row.locator("xpath=//a")).all())[0].get_attribute("href"))
+        await row.hover()
+        await asyncio.sleep(0.5)
+        await row.click()
+        await asyncio.sleep(0.5)
         
         # Looking for "Web3" which seems to be a common pattern where tags start
         tag_separator = "Web3"
@@ -74,7 +70,8 @@ async def run_scraper(playwright: Playwright) -> None:
             location=clean_location,
             tags=tags,
             posted=lines[4],
-            description=await page.locator('xpath=/html/body/div/main/section[1]/div/div[2]/div[1]').inner_text()
+            description=await page.locator('xpath=/html/body/div/main/section[1]/div/div[2]/div[1]').inner_text(),
+            link=link
         ))
     json.dump([job.model_dump() for job in jobs], open('jobs.json', 'w', encoding='utf-8'), indent=4, ensure_ascii=False)
 
