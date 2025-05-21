@@ -78,3 +78,11 @@ The agent will:
 - Adjust the match threshold in `job_agent.py` (default is 80%)
 - Modify the job scraping interval (default is 4 hours)
 - Edit the notification format in the `send_telegram_notification` function 
+
+## Funding
+
+## ☕ Sponsor Me
+
+If you like this project, consider [buying me OpenAI credits](https://buymeacoffee.com/bonifaciocalindoro)!
+
+[![Buy Me a Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=☕&slug=bonifaciocalindoro&button_colour=FFDD00&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/bonifaciocalindoro)
